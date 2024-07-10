@@ -1,5 +1,6 @@
 "use client"
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { addUser } from '@/serverAction/addUser';
+import { useState, ChangeEvent, FormEvent } from 'react';
 
 interface User {
   id: number;
@@ -10,31 +11,14 @@ interface User {
 
 export default function Home() {
   const [name, setName] = useState<string>('');
-  const [age, setAge] = useState<string>('');
+  const [age, setAge] = useState<number | undefined>();
   const [gender, setGender] = useState<string>('');
-  // const [users, setUsers] = useState<User[]>([]);
 
-  // const fetchUsers = async () => {
-  //   const res = await fetch('localhost:3000/api/users');
-  //   const data: User[] = await res.json();
-  //   setUsers(data);
-  // };
-
-  // useEffect(() => {
-  //   fetchUsers();
-  // }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await fetch('localhost:3000/api/user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, age: Number(age), gender }),
-    });
-    // fetchUsers();
-  };
+    addUser(name,age!,gender);
+  }
 
   return (
     <div className="min-h-screen bg-darkPurple text-white flex flex-col items-center py-10">
@@ -54,7 +38,7 @@ export default function Home() {
         <input 
           type="number" 
           value={age} 
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setAge(e.target.value)} 
+          onChange={(e: any) => setAge(e.target.value)} 
           placeholder="Age" 
           required 
           className="mb-2 p-2 w-full bg-darkPurple text-white rounded-md"
